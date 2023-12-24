@@ -26,10 +26,14 @@ parse_git_branch() {
         deleted_files=("$(echo "$status" | grep -c '^ D\|^D')")
 
         local counters=""
-        [ "${new_files[*]}" -gt 0 ] && counters+="$(tput setaf 2)+${new_files[*]}$(tput sgr0)"
-        [ "${modified_files[*]}" -gt 0 ] && counters+="$(tput setaf 3)~${modified_files[*]}$(tput sgr0)"
-        [ "${added_files[*]}" -gt 0 ] && counters+="$(tput setaf 6)A${added_files[*]}$(tput sgr0)"
-        [ "${deleted_files[*]}" -gt 0 ] && counters+="$(tput setaf 1)-${deleted_files[*]}$(tput sgr0)"
+        [ "${new_files[*]}" -gt 0 ] \
+            && counters+="$(tput setaf 2)+${new_files[*]}$(tput sgr0)"
+        [ "${modified_files[*]}" -gt 0 ] \
+            && counters+="$(tput setaf 3)~${modified_files[*]}$(tput sgr0)"
+        [ "${added_files[*]}" -gt 0 ] \
+            && counters+="$(tput setaf 6)A${added_files[*]}$(tput sgr0)"
+        [ "${deleted_files[*]}" -gt 0 ] \
+            && counters+="$(tput setaf 1)-${deleted_files[*]}$(tput sgr0)"
 
         [ -n "$counters" ] && echo "$branch $(tput setaf 4)[$(tput sgr0)${counters}$(tput setaf 4)]$(tput sgr0)" || echo "$branch"
     fi
@@ -42,7 +46,6 @@ parse_python_venv() {
 }
 
 TIME="\[$(tput bold)\]\[$(tput setaf 6)\]\t"
-# EXPRESSION_IN_BRACKETS="\[$(tput setaf 2)\][\[$(tput setaf 3)\]\u\[$(tput setaf 1)\]@\[$(tput setaf 3)\]\h:\$(pwd)\[$(tput setaf 6)\]\[$(tput setaf 2)\]]"
 EXPRESSION_IN_BRACKETS="\[$(tput setaf 2)\][\[$(tput setaf 3)\]\u\[$(tput setaf 1)\]@\[$(tput setaf 3)\]\h:\w\[$(tput setaf 6)\]\[$(tput setaf 2)\]]"
 GIT_BRANCH="\[ \$(parse_git_branch) \]"
 PYTHON_VENV="\[$(parse_python_venv)\]"
