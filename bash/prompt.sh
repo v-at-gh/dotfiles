@@ -35,7 +35,9 @@ parse_git_branch() {
         [ "${deleted_files[*]}" -gt 0 ] \
             && counters+="$(tput setaf 1)-${deleted_files[*]}$(tput sgr0)"
 
-        [ -n "$counters" ] && echo "$branch $(tput setaf 4)[$(tput sgr0)${counters}$(tput setaf 4)]$(tput sgr0)" || echo "$branch"
+        [ -n "$counters" ] \
+            && echo "$branch $(tput setaf 4)[$(tput sgr0)${counters}$(tput setaf 4)]$(tput sgr0)" \
+            || echo "$branch"
     fi
 }
 
@@ -50,4 +52,6 @@ EXPRESSION_IN_BRACKETS="\[$(tput setaf 2)\][\[$(tput setaf 3)\]\u\[$(tput setaf 
 GIT_BRANCH="\[ \$(parse_git_branch) \]"
 PYTHON_VENV="\[$(parse_python_venv)\]"
 PROMPT="\[$(tput setaf 4)\]\n\\$\[$(tput sgr0)\] "
+
+# construct resulting bash prompt
 PS1="${TIME} ${EXPRESSION_IN_BRACKETS}${GIT_BRANCH}${PYTHON_VENV}${PROMPT}"
