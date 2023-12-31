@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# This file contains functions for collecting logs from iphone
+
 
 # Check if the script is sourced, not executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

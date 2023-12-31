@@ -6,71 +6,43 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     exit 1
 fi
 
+colorize() {
+    local text="$1"
+    local color="$2"
+    echo "$(tput setaf $color)$text$(tput sgr0)"
+}
+
 parse_git_branch() {
     local branch
     branch=$(git branch --show-current 2>/dev/null)
+
     if [ -n "$branch" ]; then
         local status
         status=$(git status --porcelain 2>/dev/null)
-        
+
         local new_files
-        new_files=("$(echo "$status" | grep -c '^??')")
+        new_files=$(echo "$status" | grep -c '^??')
 
         local modified_files
-        modified_files=("$(echo "$status" | grep -c '^ M\|^MM\|^M\|^RM')")
-        
+        modified_files=$(echo "$status" | grep -c '^ M\|^MM\|^M\|^RM')
+
         local added_files
-        added_files=("$(echo "$status" | grep -c '^A\|^AD')")
-        
+        added_files=$(echo "$status" | grep -c '^A\|^AD')
+
         local deleted_files
-        deleted_files=("$(echo "$status" | grep -c '^ D\|^D')")
+        deleted_files=$(echo "$status" | grep -c '^ D\|^D')
 
         local counters=""
-        [ "${new_files[*]}" -gt 0 ] \
-            && counters+=\
-"\
-$(tput setaf 2)\
-+${new_files[*]}\
-$(tput sgr0)\
-"
 
-        [ "${modified_files[*]}" -gt 0 ] \
-            && counters+=\
-"\
-$(tput setaf 3)\
-~${modified_files[*]}\
-$(tput sgr0)\
-"
+        [ "$new_files" -gt 0 ] && counters+="$(colorize +$new_files 2)"
+        [ "$modified_files" -gt 0 ] && counters+="$(colorize ~$modified_files 3)"
+        [ "$added_files" -gt 0 ] && counters+="$(colorize A$added_files 6)"
+        [ "$deleted_files" -gt 0 ] && counters+="$(colorize -$deleted_files 1)"
 
-        [ "${added_files[*]}" -gt 0 ] \
-            && counters+=\
-"\
-$(tput setaf 6)\
-A${added_files[*]}\
-$(tput sgr0)\
-"
-
-        [ "${deleted_files[*]}" -gt 0 ] \
-            && counters+=\
-"\
-$(tput setaf 1)\
--${deleted_files[*]}\
-$(tput sgr0)\
-"
-
-        [ -n "$counters" ] \
-            && echo "$branch \
-$(tput bold)$(tput setaf 6)\
-[\
-$(tput sgr0)\
-${counters}\
-$(tput bold)$(tput setaf 6)\
-]\
-$(tput sgr0)\
-" \
-            || echo "$branch"
+        [ -n "$counters" ] && echo "$branch $(tput bold)$(colorize [ 6)${counters}$(tput bold)$(colorize ] 6)" || echo "$branch"
     fi
 }
+
 
 parse_python_venv() {
     if [ -n "$VIRTUAL_ENV" ]; then
