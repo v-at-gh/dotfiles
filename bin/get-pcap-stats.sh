@@ -19,8 +19,10 @@ cat <<EOF
 Executing:
 tshark -r "${DUMP_FILE_PATH}" -q -z "endpoints,${FAMILY}" | tee "${DUMP_STATS_PATH}"
 EOF
-        # Execution
-        tshark -r "${DUMP_FILE_PATH}" -q -z "endpoints,${FAMILY}" | tee "${DUMP_STATS_PATH}" && \
+
+# Execution
+tshark -r "${DUMP_FILE_PATH}" -q -z "endpoints,${FAMILY}" | tee "${DUMP_STATS_PATH}" && \
+
 # Print info
 cat <<EOF
 Statistics from file "${DUMP_FILE_PATH}" successfully collected to file "${DUMP_STATS_PATH}"
@@ -42,8 +44,10 @@ cat <<EOF
 Executing:
 tshark -r "${DUMP_FILE_PATH}" -q -z io,phs | tee "${DUMP_STATS_PATH}"
 EOF
-        # Execution
-        tshark -r "${DUMP_FILE_PATH}" -q -z io,phs > "${DUMP_STATS_PATH}" && \
+
+# Execution
+tshark -r "${DUMP_FILE_PATH}" -q -z io,phs | tee "${DUMP_STATS_PATH}" && \
+
 # Print info
 cat <<EOF
 Statistics from file "${DUMP_FILE_PATH}" successfully collected to file "${DUMP_STATS_PATH}"
