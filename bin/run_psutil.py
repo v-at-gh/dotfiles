@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 
-import psutil
+import os, sys
+
+try:
+    import psutil
+except ModuleNotFoundError:
+    print(f'Module psutil not found.\n Install it with `pip3 install psutil`')
+    sys.exit(1)
 
 for i, pid in enumerate(sorted(set(connection.pid for connection in psutil.net_connections())), 1):
     try:
