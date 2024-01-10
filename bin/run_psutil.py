@@ -5,10 +5,15 @@ import os, sys
 try:
     import psutil
 except ModuleNotFoundError:
-    print(f'Module psutil not found.\n Install it with `pip3 install psutil`')
+    print(f'Module psutil not found.\nInstall it with `pip3 install psutil`')
     sys.exit(1)
 
-for i, pid in enumerate(sorted(set(connection.pid for connection in psutil.net_connections())), 1):
+
+#TODO: fix error encountered under linux:
+# TypeError: '<' not supported between instances of 'NoneType' and 'int'
+connections = psutil.net_connections()
+sorted_pids_of_processes_with_connections = sorted(set(connection.pid for connection in connections if connection.pid != None))
+for i, pid in enumerate(sorted_pids_of_processes_with_connections, 1):
     try:
         process_dict = psutil.Process(pid).as_dict()
         print(f"{i}. {(process_dict['exe'])}")
