@@ -24,7 +24,7 @@ def print_processes_with_their_corresponding_connections_and_open_files_as_a_nes
     for i, pid in enumerate(sorted_pids_of_processes_with_connections, 1):
         try:
             process_dict = psutil.Process(pid).as_dict()
-            print(f"{i}. {(process_dict['exe'])}")
+            print(f"{i}. PID: {process_dict['pid']}. Exe: {(process_dict['exe'])}")
             print(f"  Connections amount: {len(process_dict['connections'])}")
             for connection in process_dict['connections']:
                 if connection.raddr != ():
@@ -37,9 +37,10 @@ def print_processes_with_their_corresponding_connections_and_open_files_as_a_nes
                     f" {connection.laddr.ip}:{connection.laddr.port}{rsocket}"
                     f" {connection.status}"
                 )
-            print(f"  Open files amount: {len(process_dict['open_files'])}")
-            for open_file in process_dict['open_files']:
-                print(f"    {open_file.fd} {open_file.path}")
+            if len(process_dict['open_files']) > 0:
+                print(f"  Open files amount: {len(process_dict['open_files'])}")
+                for open_file in process_dict['open_files']:
+                    print(f"    {open_file.fd} {open_file.path}")
             print()
         except psutil.NoSuchProcess:
             pass
